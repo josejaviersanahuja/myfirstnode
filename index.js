@@ -67,7 +67,7 @@ app.use((request, response) => {
   })
 })
 // Levantamos el servidor local y el puerto por donde vamos a escuchar ese servidor.
-const PORT = 3002
+const PORT = process.env.PORT || 3002
 // con express el listen es async, y el log debe entrar como funcion en el parámetro del listen.
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
