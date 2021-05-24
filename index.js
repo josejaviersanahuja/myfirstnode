@@ -8,7 +8,7 @@ const pokemonsYataques = require('./datapokemons/pokemonsYataques.json')
 const ataqueRapidoPVP = require('./dataataques/ataques_rapidos_PVP.json')
 const ataqueCargadoPVP = require('./dataataques/ataques_cargados_PVP.json')
 const pokemonwithnodata = require('./datapokemons/nodata.json')
-
+const pokemonTypes = require('./datapokemons/pokemonTypes.json')
 // const http = require('http') // como Eslint lo comenta ->
 // la dependencia http o express esta declarado en forma de CommonJS module.
 // La forma ES6 (EmmaScript) está disponible desde 2020 pero con poca documentación
@@ -48,7 +48,8 @@ app.get('/api/pokemon/:id', (request, response) => {
         base_defense: pokstats.base_defense,
         base_stamina: pokstats.base_stamina,
         charged_moves: [],
-        fast_moves: []
+        fast_moves: [],
+        type: []
       }
       const findcurrentpoke = pokemonsYataques.find(ele => ele.pokemon_name === pokstats.pokemon_name && ele.pokemon_id === pokstats.pokemon_id && ele.form === pokstats.form)
       if (findcurrentpoke.charged_moves) {
@@ -56,6 +57,10 @@ app.get('/api/pokemon/:id', (request, response) => {
       }
       if (findcurrentpoke.fast_moves) {
         objpok.fast_moves = findcurrentpoke.fast_moves
+      }
+      const findcurrentpokType = pokemonTypes.find(ele => ele.pokemon_name === pokstats.pokemon_name && ele.pokemon_id === pokstats.pokemon_id && ele.form === pokstats.form)
+      if (findcurrentpokType.type) {
+        objpok.type = findcurrentpokType.type
       }
       pokemon.push(objpok)
     }
