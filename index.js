@@ -30,7 +30,7 @@ app.use(logger)
 
 app.get('/', (request, response) => {
   console.log(request)
-  response.send(' <h1>Bienvenido a la primera API de ZitrojjDev</h1> <hr/> <h2>Existen de momento 2 llamadas posibles a esta API</h2> <ol><li><b>/api/pokemons</b> que devuelve un json con 1 array de todos los pokemons</li><li><b>/api/pokemon/:id</b> Ten en cuenta que el id es un número que define a un pokemon. esta llamada devuelve un json con un objeto con detalles y datos del pokemon en cuestión</li></ol>')
+  response.send(' <h1>Bienvenido a la primera API de ZitrojjDev</h1> <hr/> <h2>Existen de momento 2 llamadas posibles a esta API</h2> <ol><li><b>/api/pokemons</b> que devuelve un json con 1 array de todos los pokemons</li><li><b>/api/pokemon/:id</b> Ten en cuenta que el id es un número que define a un pokemon. esta llamada devuelve un json con un objeto con detalles y datos del pokemon en cuestión</li><li><b>/api/pvp/all_fast</b>: devuelve todos los ataques rápidos</li><li><b>/api/pvp/all_charged</b>: devuelve todos los ataques cargados</li><li><b>/api/pvp/fast_moves/:name</b>: devuelve el ataque rápido con nombre "name"</li><li><b>/api/pvp/charged_attacks/:name</b>: devuelve el ataque cargado con nombre "name"</li></ol>')
 })
 
 app.get('/api/pokemons', (request, response) => { response.json(pokemonsbd) })
@@ -95,6 +95,24 @@ app.get('/api/pvp/fast_moves/:name', (request, response) => {
 app.get('/api/pvp/charged_attacks/:name', (request, response) => {
   const name = request.params.name
   const finalresponse = ataqueCargadoPVP.find(e => e.name === name)
+  if (finalresponse) {
+    response.json(finalresponse)
+  } else {
+    response.status(204).json()
+  }
+})
+
+app.get('/api/pvp/all_charged/', (request, response) => {
+  const finalresponse = ataqueCargadoPVP
+  if (finalresponse) {
+    response.json(finalresponse)
+  } else {
+    response.status(204).json()
+  }
+})
+
+app.get('/api/pvp/all_fast', (request, response) => {
+  const finalresponse = ataqueRapidoPVP
   if (finalresponse) {
     response.json(finalresponse)
   } else {
