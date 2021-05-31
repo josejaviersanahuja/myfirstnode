@@ -9,6 +9,7 @@ const ataqueRapidoPVP = require('./dataataques/ataques_rapidos_PVP.json')
 const ataqueCargadoPVP = require('./dataataques/ataques_cargados_PVP.json')
 const pokemonwithnodata = require('./datapokemons/nodata.json')
 const pokemonTypes = require('./datapokemons/pokemonTypes.json')
+
 // const http = require('http') // como Eslint lo comenta ->
 // la dependencia http o express esta declarado en forma de CommonJS module.
 // La forma ES6 (EmmaScript) está disponible desde 2020 pero con poca documentación
@@ -22,10 +23,11 @@ const app = express() // asi de facil se crea la app con express.
 }) */
 
 // trabajemos con express y creemos nuestras propias responses
-
+const listazitropokemones = []
 // para gestión de posts, hace falta un parser que lea objetos en formato json por ejemplo.
 app.use(cors()) // por defecto, habilita a todo el mundo a usar nuestra API
-app.use(express.json()) // esta es la forma de usar el parser que ofrece expres. Es un middleware
+app.use(express.json()) // esta es la forma de usar el parser que ofrece expres. Es un middleware para manejar posts
+// forma de crear modulos y en particular de crear un middleware
 app.use(logger)
 
 app.get('/', (request, response) => {
@@ -33,7 +35,21 @@ app.get('/', (request, response) => {
   response.send(' <h1>Bienvenido a la primera API de ZitrojjDev</h1> <hr/> <h2>Existen de momento 2 llamadas posibles a esta API</h2> <ol><li><b>/api/pokemons</b> que devuelve un json con 1 array de todos los pokemons</li><li><b>/api/pokemon/:id</b> Ten en cuenta que el id es un número que define a un pokemon. esta llamada devuelve un json con un objeto con detalles y datos del pokemon en cuestión</li><li><b>/api/pvp/all_fast</b>: devuelve todos los ataques rápidos</li><li><b>/api/pvp/all_charged</b>: devuelve todos los ataques cargados</li><li><b>/api/pvp/fast_moves/:name</b>: devuelve el ataque rápido con nombre "name"</li><li><b>/api/pvp/charged_attacks/:name</b>: devuelve el ataque cargado con nombre "name"</li></ol>')
 })
 
-app.get('/api/pokemons', (request, response) => { response.json(pokemonsbd) })
+app.get('/api/combos', (request, response) => {
+  response.json(listazitropokemones)
+  console.log(request)
+})
+app.post('/api/combos', (request, response) => {
+  const crearpokemon = request.body
+  const id = crearpokemon.id
+  listazitropokemones[id] = crearpokemon
+  console.log(listazitropokemones)
+  // response.json(request.body)
+})
+app.get('/api/pokemons', (request, response) => {
+  response.json(pokemonsbd)
+  console.log(request.body)
+})
 app.get('/api/pokemon/:id', (request, response) => {
   const id = request.params.id // este id, siempre será considerado un string
 
@@ -108,6 +124,7 @@ app.get('/api/pvp/all_charged/', (request, response) => {
     response.json(finalresponse)
   } else {
     response.status(204).json()
+    console.log(request.body)
   }
 })
 
@@ -117,13 +134,15 @@ app.get('/api/pvp/all_fast', (request, response) => {
     response.json(finalresponse)
   } else {
     response.status(204).json()
+    console.log(request.body)
   }
 })
-
+// como no entro en ningún get o post, lanza el 404
 app.use((request, response) => {
   response.status(404).json({
     error: 'page not found'
   })
+  console.log(request.body)
 })
 // Levantamos el servidor local y el puerto por donde vamos a escuchar ese servidor.
 const PORT = process.env.PORT || 3002
