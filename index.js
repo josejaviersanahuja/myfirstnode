@@ -66,7 +66,7 @@ app.get('/api/combos/:id', (request, response, next) => {
     })
 })
 
-app.post('/api/combos', (request, response) => {
+app.post('/api/combos', (request, response, next) => {
   const crearpokemon = new Zitropokemon(request.body)
   crearpokemon.save()
     .then(result => {
@@ -74,7 +74,7 @@ app.post('/api/combos', (request, response) => {
       response.json(result)
       // mongoose.connection.close() Si hago esto daño la app
     }).catch(e => {
-      console.error(e)
+      next(e)
     })
 })
 app.get('/api/pokemons', (request, response) => {

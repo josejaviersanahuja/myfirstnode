@@ -5,9 +5,6 @@ const zitropokemonSchema = new Schema(
   {
     id: Number,
     name: String,
-    base_attack: Number,
-    base_defense: Number,
-    base_stamina: Number,
     forms: Array,
     nodata: Boolean
   }
