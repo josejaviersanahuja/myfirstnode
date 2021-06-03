@@ -181,6 +181,8 @@ app.use(handleError)
 // Levantamos el servidor local y el puerto por donde vamos a escuchar ese servidor.
 const PORT = process.env.PORT || 3002
 // con express el listen es async, y el log debe entrar como funcion en el parámetro del listen.
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
-// nuestra app solo va a hacer gets
+// nuestra app final solo va a hacer gets
+
+module.exports = { app, server }
