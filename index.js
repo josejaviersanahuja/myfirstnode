@@ -11,7 +11,8 @@ const ataqueCargadoPVP = require('./dataataques/ataques_cargados_PVP.json')
 const pokemonwithnodata = require('./datapokemons/nodata.json')
 const pokemonTypes = require('./datapokemons/pokemonTypes.json')
 require('./mongo')
-const Zitropokemon = require('./models/Zitropokemons')
+const PokemonFullData = require('./models/PokemonFullData')
+const Zitropokemons = require('./models/Zitropokemons')
 const handleError = require('./middlewares/handleError')
 const handle404 = require('./middlewares/handle404')
 // const http = require('http') // como Eslint lo comenta ->
@@ -36,11 +37,11 @@ app.use(logger)
 
 app.get('/', (request, response) => {
   console.log(request)
-  response.send(' <h1>Bienvenido a la primera API de ZitrojjDev</h1> <hr/> <h2>Existen de momento 2 llamadas posibles a esta API</h2> <ol><li><b>/api/pokemons</b> que devuelve un json con 1 array de todos los pokemons</li><li><b>/api/pokemon/:id</b> Ten en cuenta que el id es un número que define a un pokemon. esta llamada devuelve un json con un objeto con detalles y datos del pokemon en cuestión</li><li><b>/api/pvp/all_fast</b>: devuelve todos los ataques rápidos</li><li><b>/api/pvp/all_charged</b>: devuelve todos los ataques cargados</li><li><b>/api/pvp/fast_moves/:name</b>: devuelve el ataque rápido con nombre "name"</li><li><b>/api/pvp/charged_attacks/:name</b>: devuelve el ataque cargado con nombre "name"</li></ol>')
+  response.send(' <h1>Bienvenido a la primera API de ZitrojjDev</h1> <hr/> <h2>Existen de momento 2 llamadas posibles a esta API</h2> <ol><li><b>/api/pokemons</b> que devuelve un json con 1 array de todos los pokemons</li><li><b>/api/pokemon/:id</b> Ten en cuenta que el id es un número que define a un pokemon. esta llamada devuelve un json con un objeto con detalles y datos del pokemon en cuestión</li><li><b>/api/pvp/all_fast</b>: devuelve todos los ataques rápidos</li><li><b>/api/pvp/all_charged</b>: devuelve todos los ataques cargados</li><li><b>/api/pvp/fast_moves/:name</b>: devuelve el ataque rápido con nombre "name"</li><li><b>/api/pvp/charged_attacks/:name</b>: devuelve el ataque cargado con nombre "name"</li><li><b>/api/combos</b>: devuelve TODOS los detalles de TODOS los pokemones... a modificar en un futuro para recibir parámetros como limit</li><li><b>/api/combos/:id</b>: devuelve todos los datos del pokemon con ID = id</li></ol>')
 })
 
 app.get('/api/combos', (request, response, next) => {
-  Zitropokemon.find().sort({ id: 1 })
+  PokemonFullData.find().sort({ id: 1 })
     .then(zitropokemon => {
       response.json(zitropokemon)
     }).catch(err => {
@@ -54,7 +55,7 @@ app.get('/api/combos', (request, response, next) => {
 app.get('/api/combos/:id', (request, response, next) => {
   const id = Number(request.params.id)
 
-  Zitropokemon.find({ id })
+  PokemonFullData.find({ id })
     .then(result => {
       if (result) {
         response.json(result)
@@ -67,7 +68,7 @@ app.get('/api/combos/:id', (request, response, next) => {
 })
 
 app.post('/api/combos', (request, response, next) => {
-  const crearpokemon = new Zitropokemon(request.body)
+  const crearpokemon = new Zitropokemons(request.body)
   crearpokemon.save()
     .then(result => {
       console.log(result)
